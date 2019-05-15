@@ -5,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.mail.*;
 import javax.mail.internet.*;
+import org.primefaces.PrimeFaces;
 
 public class SendEmail {
 
@@ -137,21 +140,29 @@ public class SendEmail {
                     + "</xml><![endif]--><!--[if gte mso 9]><xml>\n"
                     + "<o:shapelayout v:ext=\"edit\">\n"
                     + "<o:idmap v:ext=\"edit\" data=\"1\" />\n"
-                    + "</o:shapelayout></xml><![endif]--></head><body lang=EN-GB link=\"#0563C1\" vlink=\"#954F72\"><div class=WordSection1><p class=MsoNormal><span style='font-size:12.0pt'>Good Day</span><span style='font-size:14.0pt'> </span><b><span style='font-size:12.0pt'>" + username + "</span></b><br><span style='font-size:10.0pt'><br>The link below will redirect you to the password reset page: <br><a href=\"http://localhost:28322/TicketVerifier/faces/forgotPass2.xhtml?token1=" + token1 + "&"
-                    + "token2=" + token2 + "&token3=" + token3 + "&username="+username+"&to="+to+"&date="+date+"&time="+time+" \"><span style='color:red'>click here</span> </a>.<br><br>Please note that this link will be inaccessible after a duration of 15 minutes.<br>If the link expires, please regenerate the email for the link one more time and the email will be resent</span>.<br><br><span style='color:#4472C4'>________________________<br></span><b><span style='font-size:16.0pt;color:#4472C4'>Ticket Verifier<sup>T</sup></span></b><span style='font-size:10.0pt;color:#4472C4'> <br></span><b><span style='font-size:10.0pt;color:red'><a href=\"tel:+27%2081%20217%204767\"><span style='color:red'>Mobile</span></a></span></b><span style='font-size:10.0pt;color:red'><br><b><a href=\"mailto:passycahspassy@gmail.com\"><span style='color:red'>Email</span></a></b></span><span style='color:red'> </span><span style='color:#4472C4;mso-fareast-language:EN-GB'><o:p></o:p></span></p><p class=MsoNormal><o:p>&nbsp;</o:p></p></div></body></html>";
+                    + "</o:shapelayout></xml><![endif]--></head><body lang=EN-GB link=\"#0563C1\" vlink=\"#954F72\"><div class=WordSection1><p class=MsoNormal><span style='font-size:12.0pt'>Good Day</span><span style='font-size:14.0pt'> </span><b><span style='font-size:12.0pt'>" + username + "</span></b><br><span style='font-size:10.0pt'><br>The link below will redirect you to the password reset page: <br><a href=\"http://localhost:28322/TicketVerifier/rp?token="
+                    + token1 + token2 + token3 + "\"><span style='color:red'>click here</span> </a>.<br><br>Please note that this link will be inaccessible after a duration of 15 minutes.<br>If the link expires, please regenerate the email for the link one more time and the email will be resent</span>.<br><br><span style='color:#4472C4'>________________________<br></span><b><span style='font-size:16.0pt;color:#4472C4'>Ticket Verifier<sup>T</sup></span></b><span style='font-size:10.0pt;color:#4472C4'> <br></span><b><span style='font-size:10.0pt;color:red'><a href=\"tel:+27%2081%20217%204767\"><span style='color:red'>Mobile</span></a></span></b><span style='font-size:10.0pt;color:red'><br><b><a href=\"mailto:passycahspassy@gmail.com\"><span style='color:red'>Email</span></a></b></span><span style='color:red'> </span><span style='color:#4472C4;mso-fareast-language:EN-GB'><o:p></o:p></span></p><p class=MsoNormal><o:p>&nbsp;</o:p></p></div></body></html>";
            
-
-            String sqlInsertPassReset = "INSERT INTO PETER.PASSWORDRESET (TOKEN1, TOKEN2, TOKEN3, USERNAME, EMAIL, EMAILDATE, EMAILTIME) \n"
-                    + "VALUES ('" + token1 + "', '" + token2 + "', '" + token3 + "', '" + username + "', '" + to + "', '" + date + "', '"+time+"' )";
+            String token = token1 + token2 + token3;
+            if(token.length()>=100)
+            {
+                token = token.substring(0,99);
+            }
+            
+            String sqlInsertPassReset = "INSERT INTO PETER.PASSWORDRESET (TOKEN, USERNAME, EMAIL, ISRESET) \n"
+                    + "VALUES ('" + token + "', '" + username + "', '" + to + "', false)";
             st.executeUpdate(sqlInsertPassReset);
 
             message.setContent(msg, "text/html; charset=UTF-8");
 
             Transport.send(message);
-            //System.out.println("Msg Sent!\n " + token1 + "\n" + token2 + "\n" + token3 + "");
+            System.out.println("Msg Sent!\n " + token1 + "\n" + token2 + "\n" + token3 + "");
             return true;
         } catch (MessagingException | SQLException mex) {
             //System.out.println(mex);
+            FacesContext.getCurrentInstance().
+                            addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Contact the DevOps for this error",
+                                    mex +""));
             mex.printStackTrace();
             return false;
         }

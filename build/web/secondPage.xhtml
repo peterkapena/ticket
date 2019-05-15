@@ -16,9 +16,9 @@
                              requiredMessage="Please enter the ticket number"
                              value="#{tickets.ticketNum}">
                 </p:inputText> 
-                <p:commandButton value="Verify" action="#{tickets.getVerify()}" update="tableView">
+                <p:commandButton value="Verify" action="#{tickets.getVerify()}" update="tableView" ajax="false">
                 </p:commandButton>
-                <p:growl id="message" showDetail="true" life="10000"/>
+                <p:growl id="message" showDetail="true" life="50000"/>
 
                 <br/><br/>
                 <h:dataTable onclick="PF('dlg1').show();" border="5" id="tableView"  value="#{tickets.tickets}" var="ticket" cellpadding="5" cellspacing="0">
@@ -100,10 +100,10 @@
                     <br/>
                     <br/>
 
-                    <p:growl id="message" showDetail="true" life="10000"/>
+                    <p:growl id="message" showDetail="true" life="50000"/>
 
-                    <p:commandButton onclick="PF('dlg3').hide();" value="Yes" action="#{tickets.getVerified()}" ajax="true" update="form1:tableView"/>
-                    <p:commandButton onclick="PF('dlg3').hide();" value="No" action="#{tickets.invalidTicketNumber()}" ajax="true" update="form1:tableView"/>
+                    <p:commandButton onclick="PF('dlg3').hide();" value="Yes" action="#{tickets.getVerified()}" ajax="false" update="form1:tableView"/>
+                    <p:commandButton onclick="PF('dlg3').hide();" value="No" action="#{tickets.invalidTicketNumber()}" ajax="false" update="form1:tableView"/>
 
                 </p:dialog>
             </h:form>
@@ -111,7 +111,7 @@
             <h:form>
                 <p:dialog style="margin:50px 0; padding:0; text-align:center;  color: white; background-color: activecaption;"
                           header="Confirm" widgetVar="dlg4" modal="true" height="200" width="250" resizable="false">
-                   <p:growl id="message" showDetail="true" life="10000"/>
+                   <p:growl id="message" showDetail="true" life="50000"/>
                 <p:commandButton value="Reset app" action="#{tickets.getReset()}">
                     <p:confirm header="Confirmation" message="Are you sure?" icon="pi pi-exclamation-triangle" />
                 </p:commandButton>

@@ -1,0 +1,21 @@
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+
+	<url-mapping id="login">
+		<pattern value="/login" />
+		<view-id value="/faces/index.xhtml" />
+	</url-mapping>
+        
+        <url-mapping id="resetPassword">
+		<pattern value="/rp" />
+		<view-id value="/faces/forgotPass2.xhtml" />
+	</url-mapping>/verify
+        
+        <url-mapping id="login">
+		<pattern value="/verify" />
+		<view-id value="/faces/secondPage.xhtml" />
+	</url-mapping>
+
+</pretty-config>

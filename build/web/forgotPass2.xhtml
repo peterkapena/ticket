@@ -15,7 +15,7 @@
         
         <div id="Content">
             <h:form >
-                <p:growl id="message" showDetail="true" life="10000"/>
+                <p:growl id="message" showDetail="true" life="50000"/>
                 <p:outputLabel value="USER NAME"/> <br/>
                 <p:inputText maxlength="10" placeholder="Username" id="userNameInput" required="true"
                              requiredMessage="Please enter your name"
@@ -47,7 +47,7 @@
                  <p:dialog closable="false" style="margin:50px 0; padding:0; text-align:center;  color: white; background-color: red;" 
                           header="Reset password" widgetVar="dlg1" modal="true" height="150" resizable="false">
                     
-                    <p:growl id="message" showDetail="true" life="10000"/>
+                    <p:growl id="message" showDetail="true" life="50000"/>
                     <b >
                         <p:outputLabel value="Error. Please contact the Developer." style="color: aqua;"/>
                     </b>

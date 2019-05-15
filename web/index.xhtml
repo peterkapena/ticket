@@ -17,7 +17,7 @@ and open the template in the editor.
     <h:body>
         <div id="Content">
             <h:form id="form1">
-                <p:growl id="message" showDetail="true" life="10000"/>
+                <p:growl id="message" showDetail="true" life="50000"/>
                 <p:outputLabel value="LOGIN" id="loginLabel" style="border: dashed; font-size: 40px; color: black"/><br/><br/><br/>
                 <br/>
                 <p:inputText maxlength="10" placeholder="username" id="userNameTextInput" required="true"
@@ -52,7 +52,7 @@ and open the template in the editor.
                 <p:dialog style="margin:50px 0; padding:0; text-align:center;  color: white; background-color: activecaption;" 
                           header="Reset password" widgetVar="dlg1" modal="true" height="150" resizable="false">
                     
-                    <p:growl id="message" showDetail="true" life="10000"/>
+                    <p:growl id="message" showDetail="true" life="50000"/>
                     <p:inputText maxlength="10" placeholder="username" id="userNameTextInput" required="true"
                              requiredMessage="Please Enter a User Name"
                              value="#{Users.userName}"
