@@ -18,13 +18,14 @@ import javax.servlet.http.HttpServletRequest;
 @javax.faces.view.ViewScoped
 
 public class Users implements Serializable {
+    
     public static final String port = "1234",
             host = "localhost",
             D_url = "jdbc:derby://localhost:1527/TicketVerifier",
             D_u = "Peter",
             D_p = "Peter@2684";
     
-    private String userName = "", password = "", email, phone, confirmPassword;
+    private String userName = "", password = "", email, phone, confirmPassword, query, token;
 
     public Users() {
 
@@ -96,7 +97,7 @@ public class Users implements Serializable {
             if (DataBase.addUser(user)) {
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Messsage",
-                                "User Account created; please use your details to login"));
+                                "User Account created; Please use your details to login"));
                 return "index.xhtml";
             } else {
                 FacesContext.getCurrentInstance().
@@ -117,9 +118,14 @@ public class Users implements Serializable {
         try (Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TicketVerifier", "Peter", "Peter@2684");
                 Statement st = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE); //ResultSet rst = st.executeQuery("SELECT EMAIL FROM USERS WHERE USERNAME = '"+userName+"'");)
                 ) {
+           
             if (confirmPassword.equals(password)) {
-                st.executeUpdate("UPDATE PETER.USERS SET PASSWORD = '" + password + "' WHERE USERNAME = '" + userName + "'");
-
+                st.executeUpdate("UPDATE PETER.USERS SET PASSWORD = '"+password+"' WHERE USERNAME = '"+userName+"' "
+                        + "AND (SELECT USERNAME FROM PASSWORDRESET WHERE TOKEN = '"+token+"') = '"+userName+"'");
+                
+                st.executeUpdate(""
+                        + "UPDATE PETER.PASSWORDRESET SET ISRESET = true WHERE TOKEN = '"+token+"'");
+                
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Notice",
                                 String.format("Password has been reset. You can now login with your new password!")));
@@ -260,46 +266,42 @@ public class Users implements Serializable {
         String url = req.getRequestURL().toString();
         //req.getQueryString();
         
-        String  query = req.getQueryString();
+        query = req.getQueryString();
         if(query==null)
         {
                 PrimeFaces.current().executeScript("PF('dlg1').show()");
+                System.out.println("The query url is null");
         return;
         }
         
-        String
-                token1 = query.substring(query.indexOf("token1") + 7, query.indexOf("&token2")),
-                token2 = query.substring(query.indexOf("token2") + 7, query.indexOf("&token3")),
-                token3 = query.substring(query.indexOf("token3") + 7, query.indexOf("&username")),
-                uname = query.substring(query.indexOf("username") + 9, query.indexOf("&to=")),
-                to = query.substring(query.indexOf("to=") + 3, query.indexOf("&date")),
-                date = query.substring(query.indexOf("date") + 5, query.indexOf("&time")),
-                time = query.substring(query.indexOf("time") + 5);
+        token = query.substring(query.indexOf("token") + 6);
         
-        String token1D="",token2D="",token3D="", unameD="", toD="", dateD="", timeD="";
-        
-        String queryDataBaseToken = "SELECT * FROM PETER.PASSWORDRESET WHERE TOKEN1 = '"+token1+"' AND\n"
-                + "TOKEN2 = '"+token2+"' AND TOKEN3 = '"+token3+"' AND USERNAME = '"+uname+"' AND EMAIL = '"+to+"'\n"
-                + "AND EMAILDATE = '"+date+"' AND EMAILTIME = '"+time+"'";
-        
-        try (Statement st = DriverManager.getConnection(D_url, D_u, D_p).createStatement();
-                ResultSet rst = st.executeQuery(queryDataBaseToken);) 
+        try (Statement st = DriverManager.getConnection(D_url, D_u, D_p).createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+                ResultSet rst = st.executeQuery("SELECT ISRESET FROM PETER.PASSWORDRESET WHERE TOKEN = '"+token+"'");) 
         {
+            boolean isReset=true;
+            
             while(rst.next())
             {
-                token1D = rst.getString(2);     token2D = rst.getString(3);     token3D = rst.getString(4);     
-                unameD = rst.getString(5);     toD = rst.getString(6);     timeD = rst.getString(7);   dateD = rst.getString(8);
-                
+                isReset = rst.getBoolean(1);
+                System.out.println("isReset is checked as there are rows in the query rsult");
             }
-            if(!(token1.equals(token1D) && token2.equals(token2D) && token3.equals(token3D) && uname.equals(unameD)
-                    && to.equals(toD)))
+            if(!isReset)
             {
-                PrimeFaces.current().executeScript("PF('dlg1').show()");
+                FacesContext.getCurrentInstance().
+                        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Message",
+                                "Please enter your username and then confirm your new password"));
+                System.out.println("No");
             }
-//            else
-//                System.out.println("matched url correct one");
+            else{
+                PrimeFaces.current().executeScript("PF('dlg1').show()");
+                System.out.println("Uncorrect Token detected");
+            }
             //if the D tokens equals the url tokens let the user submits the page and change his password
+            rst.close();        st.close();
+            
         }catch (SQLException mex) {
+            
             //System.out.println(mex);
             mex.printStackTrace();
         }

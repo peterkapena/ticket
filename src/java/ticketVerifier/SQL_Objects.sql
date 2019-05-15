@@ -30,22 +30,14 @@ insert into Tickets values(236,'Test',1)
 
 
 CREATE TABLE passwordreset 
-(resetNumber int NOT null GENERATED ALWAYS AS IDENTITY
-        (START WITH 1, INCREMENT BY 1),
-token1 VARCHAR(100) NOT NULL,  
-token2 VARCHAR(100) NOT NULL, 
-token3 VARCHAR(100) NOT NULL, 
+(
+token VARCHAR(200) NOT NULL,  
 username varchar(20) not null,
 email varchar(50) ,
 foreign key(username) references Users(UserName),
-PRIMARY KEY (resetNumber));
-
-ALTER TABLE
-PETER.passwordreset
-ADD
-emailDate date NOT NULL DEFAULT '17/03/1997';
+PRIMARY KEY (token));
 
 ALTER TABLE
 PETER.passwordreset
 ADD column
-emailTime time NOT NULL DEFAULT '00:00:00';
+isReset boolean;
