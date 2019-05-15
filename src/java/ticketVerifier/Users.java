@@ -98,7 +98,7 @@ public class Users implements Serializable {
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Messsage",
                                 "User Account created; Please use your details to login"));
-                return "index.xhtml";
+                return "/verify";
             } else {
                 FacesContext.getCurrentInstance().
                         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "System error",
