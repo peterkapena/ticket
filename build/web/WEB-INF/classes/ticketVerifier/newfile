@@ -1,0 +1,97 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:h="http://xmlns.jcp.org/jsf/html" dir="ltr"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    
+    <h:head>
+        <title>Ticket Verifier</title>
+        <h:outputStylesheet name="style.css" library="css"/>
+    </h:head>
+    
+    <h:body>
+        <h:form>
+            <h1>
+                Welcome #{users.userName}
+            </h1>
+            <h1>
+                Please enter the ticket number below and submit to verify it
+            </h1>
+        
+            <h:outputLabel value="TICKET NUMBER"/> <br/>
+            <h:inputText value="#{tickets.ticketNum}" required="true" requiredMessage="Only 3 digits allowed">
+            </h:inputText>
+            <br/>
+            <h:commandButton value="VERIFY"/>
+            
+            <!--
+            <br/>
+            <h:outputText escape="false" value=""/>  -->
+        </h:form>
+        
+        <h:form>
+            <h:commandButton action="index" value="LOG OFF"/>
+        </h:form>
+        
+        <h:form >
+            <h:dataTable value="#{tickets.tickets}" var="ticket" cellpadding="5" cellspacing="0">
+                <h:column>
+                    <f:facet name="header">TICKET NUMBER</f:facet>
+                    #{ticket.TICKETNUM}
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">LAST ENTRANCE</f:facet>
+                    #{ticket.LASTENTRANCE}
+                </h:column>
+                
+                <h:column>
+                    <f:facet name="header">ENTRANCE TIMES</f:facet>
+                    #{ticket.ENTRANCETIMES}
+                </h:column>
+                
+            </h:dataTable>
+        </h:form>        
+    </h:body>
+</html>
+
+
+public String getVerify()
+    {
+        /*
+        int nOfEntrances = DataBase.addToDatabase(Integer.parseInt(ticketNum));
+        if(nOfEntrances>=1)
+        {
+            verifiedMessage = "The ticket has been used already!\nThe Number of entrances with this ticket is "+nOfEntrances;
+            return verifiedMessage;
+        }
+        
+        else{
+            DataBase.addToDatabase(Integer.parseInt(ticketNum));
+            verifiedMessage="The guest can get in";
+            return verifiedMessage;
+        }
+*/      //setVerifiedMessage(ticketNum);
+        return ticketNum;
+    }
+    
+    public static void main(String[] args) {
+       System.out.println(new Tickets("898").getVerify());
+    }
+    
+    public ResultSet getTickets() throws SQLException{
+        Connection con = DriverManager.getConnection("jdbc:derby://localhost:1527/TicketVerifier","Peter","Peter@2684");
+                Statement st = con.createStatement();
+                
+        try{
+            CachedRowSet rowSet = RowSetProvider.newFactory().createCachedRowSet();
+            rowSet.populate(st.executeQuery("select * from Tickets"));
+            return rowSet;            
+        }finally{con.close();}
+    }

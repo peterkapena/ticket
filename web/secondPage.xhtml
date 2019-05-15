@@ -1,0 +1,141 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+    </h:head>
+    <title>Ticket Verifier</title>
+    <h:outputStylesheet name="style.css" library="css"/>
+    <h:outputScript name="js/secondPage.js" target="body" />
+    <h:body>
+        <div id="Content">
+            <h:form id="form1">
+                <h1>Welcome #{Users.userName}</h1>
+                <p> <b>Enter the ticket number and submit to verify it, Please</b></p> <br/>
+                <p:inputText maxlength="3" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" placeholder="type here" id="ticketNumber" required="true" autocomplete="off"
+                             requiredMessage="Please enter the ticket number"
+                             value="#{tickets.ticketNum}">
+                </p:inputText> 
+                <p:commandButton value="Verify" action="#{tickets.getVerify()}" update="tableView">
+                </p:commandButton>
+                <p:growl id="message" showDetail="true" life="10000"/>
+
+                <br/><br/>
+                <h:dataTable onclick="PF('dlg1').show();" border="5" id="tableView"  value="#{tickets.tickets}" var="ticket" cellpadding="5" cellspacing="0">
+                    <h:column>
+                        <f:facet name="header">TICKET NUMBER</f:facet>
+                            #{ticket.TICKETNUM}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">LAST ENTRANCE</f:facet>
+                            #{ticket.LASTENTRANCE}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">ENTRANCE TIMES</f:facet>
+                            #{ticket.ENTRANCETIMES}
+                    </h:column>
+                </h:dataTable>
+
+            </h:form>
+            
+            
+            
+            <h:form>
+                <p:dialog style="margin:50px 0; padding:0; text-align:center;  color: white; background-color: activecaption;"
+                          header="Edit Ticket" widgetVar="dlg1" modal="true" height="100" resizable="false">
+                    <p:panelGrid columns="3">
+                        <p:inputText maxlength="3" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" placeholder="Ticket number" id="ticketNumberInput" required="true" autocomplete="off"
+                                     requiredMessage="Please enter the ticket number"
+                                     value="#{tickets.ticketNum}">
+                        </p:inputText> 
+                        <p:inputText placeholder="Last entrance" id="lastEntranceInput" required="true" autocomplete="off"
+                                     requiredMessage="Please enter the last entrance time"
+                                     value="#{tickets.lastEntrance}">
+                        </p:inputText>
+                        <p:inputText maxlength="2" placeholder="Entrance times" id="entranceTimesInput" required="true" autocomplete="off"
+                                     requiredMessage="Please enter the times entered"
+                                     value="#{tickets.entranceTimes}">
+                        </p:inputText>
+
+                    </p:panelGrid>
+                    <br/>
+                    <p:commandButton value="Save" action="#{tickets.editTicket()}" onclick="PF('dlg1').hide();" update="form1"/>
+
+                </p:dialog>
+            </h:form>
+            <h:form>
+                <p:dialog style="margin:50px 0; padding:0; text-align:center;  color: white; background-color: activecaption;"
+                          header="Confirm" widgetVar="dlg2" modal="true" height="100" width="250" resizable="false">
+                    <p:inputText maxlength="10" placeholder="username" id="userNameTextInput" required="true"
+                                 requiredMessage="Please Enter a User Name"
+                                 value="#{Users.userName}"
+                                 validatorMessage="User name should not exceed a maximum length of 10">
+                        <f:validateLength maximum="10" />
+                    </p:inputText>
+                    <br/>
+                    <h:message for="userNameTextInput" styleClass="userNameError"/>
+                    <p:password placeholder="password" id="passwordTextInput" required="true"
+                                requiredMessage="Please Enter a Password"
+                                value="#{Users.password}"
+                                validatorMessage="Please Enter a Password">
+                    </p:password>
+                    <h:message for="passwordTextInput" styleClass="passwordError"/>
+                    <br/>
+                    <p:commandButton value="Confirm" action="#{Users.adminVerify()}" update="form1"/> 
+                    <br/><br/>
+                </p:dialog>
+            </h:form>
+            
+            <h:form id="fDialog3">
+                <p:dialog style="margin:50px 0; padding:0; text-align:center;  color: white; background-color: activecaption;"
+                          header="Confirm guest" widgetVar="dlg3" modal="true" height="100" resizable="false">
+
+                    <p:inputText maxlength="3" onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" placeholder="Ticket number" id="ticketNumber" autocomplete="off"
+
+                                 value="#{tickets.ticketNum}">
+                    </p:inputText>
+
+                    <br/>
+                    <br/>
+
+                    <p:growl id="message" showDetail="true" life="10000"/>
+
+                    <p:commandButton onclick="PF('dlg3').hide();" value="Yes" action="#{tickets.getVerified()}" ajax="true" update="form1:tableView"/>
+                    <p:commandButton onclick="PF('dlg3').hide();" value="No" action="#{tickets.invalidTicketNumber()}" ajax="true" update="form1:tableView"/>
+
+                </p:dialog>
+            </h:form>
+            
+            <h:form>
+                <p:dialog style="margin:50px 0; padding:0; text-align:center;  color: white; background-color: activecaption;"
+                          header="Confirm" widgetVar="dlg4" modal="true" height="200" width="250" resizable="false">
+                   <p:growl id="message" showDetail="true" life="10000"/>
+                <p:commandButton value="Reset app" action="#{tickets.getReset()}">
+                    <p:confirm header="Confirmation" message="Are you sure?" icon="pi pi-exclamation-triangle" />
+                </p:commandButton>
+                <br/>
+                <br/>
+                <p:commandButton value="Add a user" action="createAccount"/>
+                <br/>
+                <br/>
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade" >
+                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" ajax="false"/>
+                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                </p:confirmDialog>
+                <p:commandButton value="Log off" action="index" style=" color: red"/>
+                <br/>
+                <br/>
+                </p:dialog>
+            </h:form>
+            
+            <h:form>
+                <p:commandButton action="index" value="Sign out"/> 
+               
+                <p:commandButton value="Administration" onclick="PF('dlg2').show();"/> <br/>
+            </h:form>
+        </div>
+
+    </h:body> 
+</html>

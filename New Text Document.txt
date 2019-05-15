@@ -1,0 +1,21 @@
+-- ticket verifier 
+-- Create user 
+-- edit a ticket
+-- reset 
+-- Forgot password *** fix it ** it is not working
+-- Reformat the code
+-- Desktop app ***
+-- Report ***
+-- Test
+
+- take the userName and password, verify that both are linked together to a user profile,
+	
+	
+- fix create user bug
+
+
+improvements
+____________
+
+not every user can add a user
+use a ticket scanner instead of entering the ticket nyumbver using the tecxt field

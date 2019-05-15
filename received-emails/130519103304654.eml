@@ -1,0 +1,12 @@
+        Mon, 13 May 2019 22:33:04 +0200 (CAT)
+Date: Mon, 13 May 2019 22:32:46 +0200 (CAT)
+From: noreply@ticket.com
+To: p@p.com
+Message-ID: <146611050.0.1557779575549@DESKTOP-JL93A29>
+Subject: Password reset link
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+Good DayPeter<br/>The link below will redirect you to the password reset page:
+<br/><a href="http://localhost:28322/TicketVerifier/faces/forgotPass2.xhtml?token=ngfSAOy5A4BwtA&token1=2970957132261137456&token2=4861685100699370704"> click here </a>

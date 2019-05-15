@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Ticket Verifier</title>
+        <h:outputStylesheet name="style.css" library="css"/>
+    </h:head>
+    
+    <h:body>
+        <div id="Content">
+            <h:form id="form1">
+                <p:growl id="message" showDetail="true" life="10000"/>
+                <p:outputLabel value="LOGIN" id="loginLabel" style="border: dashed; font-size: 40px; color: black"/><br/><br/><br/>
+                <br/>
+                <p:inputText maxlength="10" placeholder="username" id="userNameTextInput" required="true"
+                             requiredMessage="Please Enter a User Name"
+                             value="#{Users.userName}"
+                             validatorMessage="User name should not exceed a maximum length of 10">
+                    <f:validateLength maximum="10" />
+                </p:inputText>
+                <br/>
+                <h:message for="userNameTextInput" styleClass="userNameError"/>
+                <br/>
+                <p:password placeholder="password" id="passwordTextInput" required="true"
+                            requiredMessage="Please Enter a Password"
+                            value="#{Users.password}"
+                            validatorMessage="Please Enter a Password">
+                </p:password>
+                <br/>
+                <h:message for="passwordTextInput" styleClass="passwordError"/>
+                <br/>
+                <p:commandButton value="Sign in" action="#{Users.logIn()}" ajax="false"/> 
+                <br/><br/>
+
+                <i>
+                    <b >
+                        <p:outputLabel value="I forgot my password" style="color: blue;" onclick="PF('dlg1').show();"/>
+                    </b>
+                </i>
+                
+            </h:form>
+            
+            <h:form>
+                <p:dialog style="margin:50px 0; padding:0; text-align:center;  color: white; background-color: activecaption;" 
+                          header="Reset password" widgetVar="dlg1" modal="true" height="150" resizable="false">
+                    
+                    <p:growl id="message" showDetail="true" life="10000"/>
+                    <p:inputText maxlength="10" placeholder="username" id="userNameTextInput" required="true"
+                             requiredMessage="Please Enter a User Name"
+                             value="#{Users.userName}"
+                             validatorMessage="User name should not exceed a maximum length of 10">
+                    <f:validateLength maximum="10" />
+                    </p:inputText>
+                    <p:inputText placeholder="email" autocomplete="off" value="#{Users.email}" required="true" requiredMessage="Please enter your email" validatorMessage="Please enter a valid email address">
+                        <f:validateRegex pattern="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*" />
+                    </p:inputText> <br/>
+                    <p> <b>Please Use the link sent to this email to reset your password</b></p> <br/>
+                    <p:commandButton value="Send link" action="#{Users.verifyEmail()}" ajax="false"/><br/> <br/>
+
+                </p:dialog>
+            </h:form>
+            
+        </div>
+
+    </h:body>
+  
+</html>

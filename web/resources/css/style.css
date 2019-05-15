@@ -1,0 +1,70 @@
+.error
+{
+   color:red;
+}
+
+p {
+    margin: 10px 0;
+    padding: 5px;
+}
+.userNameError
+{
+   color:red;
+}
+.passwordError{
+    color:red;
+}
+
+#userNameTextInput{
+}
+
+#passwordTextInput{
+}
+
+#userNameLabel{
+}
+
+#passWordLabel{
+}
+#panel{
+    position: inherit;
+    align-content: center;
+}
+#loginLabel{
+}
+
+#Content {
+    width:500px;
+    margin:0 auto;
+    text-align: center;
+    padding:15px;
+ 
+    
+}
+body{
+    /*margin:0 auto;*/
+    margin:50px 0; 
+    padding:0;
+    text-align:center;
+    color: white;
+    background-color: activecaption;
+}
+
+#btnBackToLogin{
+ color: brown;   
+ text-decoration: brown;
+}
+
+::placeholder {
+  color: appworkspace;
+  opacity: 1; /* Firefox */
+  font: 10px italic; 
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+ color: appworkspace;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+ color: appworkspace;
+}

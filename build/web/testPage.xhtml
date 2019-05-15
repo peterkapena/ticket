@@ -1,0 +1,96 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+    </h:head>
+    <title>Ticket Verifier</title>
+    <h:outputStylesheet name="style.css" library="css"/>
+    <h:body>
+        <div id="Content">
+            <h:form id="form1">
+                <h1>Welcome</h1>
+                <p> <b>Enter the ticket number and submit to verify it, Please</b></p> <br/>
+                <p:inputText onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" placeholder="Ticket number" id="ticketNumber" required="true" autocomplete="off"
+                             requiredMessage="Please enter the ticket number"
+                             value="#{tickets.ticketNum}">
+                </p:inputText> 
+                <br/>
+                <br/>         
+
+                <p:growl id="message" showDetail="true" life="10000"/>
+
+                <p:commandButton value="SUBMIT" action="#{tickets.getVerify()}" update="form1" ajax="false">
+                </p:commandButton>
+                
+                <br/><br/>
+
+                <h:dataTable onclick="PF('dlg1').show();" border="5" id="tableView"  value="#{tickets.tickets}" var="ticket" cellpadding="5" cellspacing="0">
+                    <h:column>
+                        <f:facet name="header">TICKET NUMBER</f:facet>
+                            #{ticket.TICKETNUM}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">LAST ENTRANCE</f:facet>
+                            #{ticket.LASTENTRANCE}
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">ENTRANCE TIMES</f:facet>
+                            #{ticket.ENTRANCETIMES}
+                    </h:column>
+                </h:dataTable>
+
+            </h:form>
+            <h:form>
+                    <p:dialog header="Confirm guest" widgetVar="dlg2" modal="true" height="100">
+                       
+                        <p:inputText onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" placeholder="Ticket number" id="ticketNumber" autocomplete="off"
+                                 
+                                     value="#{tickets.ticketNum}">
+                        </p:inputText>
+
+                        <br/>
+                        <br/>
+                        
+                        <p:growl id="message" showDetail="true" life="10000"/>
+
+                        <p:commandButton value="YES" action="#{tickets.getVerified()}" ajax="false">
+                        </p:commandButton>
+                        <p:commandButton value="NO" action="#{tickets.invalidTicketNumber()}" ajax="false">
+                        </p:commandButton>
+
+                    </p:dialog>
+                </h:form>
+            <h:form>
+                <p:dialog header="Edit Ticket" widgetVar="dlg1" modal="true" height="100">
+                    <p:panelGrid columns="3">
+                        <p:inputText onkeypress="if(event.which &lt; 48 || event.which &gt; 57) return false;" placeholder="Ticket number" id="ticketNumberInput" required="true" autocomplete="off"
+                                     requiredMessage="Please enter the ticket number"
+                                     value="#{tickets.ticketNum}">
+                        </p:inputText> 
+                        <p:inputText placeholder="Last entrance" id="lastEntranceInput" required="true" autocomplete="off"
+                                     requiredMessage="Please enter the last entrance time"
+                                     value="#{tickets.lastEntrance}">
+                        </p:inputText>
+                        <p:inputText placeholder="Entrance times" id="entranceTimesInput" required="true" autocomplete="off"
+                                     requiredMessage="Please enter the times entered"
+                                     value="#{tickets.entranceTimes}">
+                        </p:inputText>
+
+                    </p:panelGrid>
+                    <p:commandButton value="Save" action="#{tickets.editTicket()}" onclick="PF('dlg1').hide();" update="form1"/>
+
+                </p:dialog>
+            </h:form>
+            <h:form>
+                <p:commandButton action="index" value="LOG OFF"/> 
+                <br/>
+                <br/>
+                <p:commandButton value="ADMIN PAGE" action="adminPage.xhtml"/> <br/>
+            </h:form>
+        </div>
+
+    </h:body> 
+</html>
